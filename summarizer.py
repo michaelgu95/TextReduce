@@ -13,10 +13,8 @@ class TextReduce(object):
     def sentIntersection(self, sent1, sent2):
         s1 = set(sent1.split(" "));
         s2 = set(sent2.split(" "));
- 
         if (len(s1) + len(s2)) == 0:
             return 0;
- 
         return len(s1.intersection(s2)) / ((len(s1) + len(s2)) / 2);
  
     def formatSent(self, sentence):
@@ -25,16 +23,13 @@ class TextReduce(object):
  
     # Convert the content into a dictionary <K, V>; k = The formatted sentence, V = The rank of the sentence
     def getSentRanks(self, content):
- 
         sentences = self.toSent(content);
- 
-        # Calculate the intersection of every two sentences
+        # Calculate intersection of every two sentences
         n = len(sentences);
         values = [[0 for x in xrange(n)] for x in xrange(n)];
         for i in range(0, n):
             for j in range(0, n):
                 values[i][j] = self.sentIntersection(sentences[i], sentences[j]);
- 
         # Sentences dictionary, the score of a sentences is the sum of all its intersection
         sentences_dic = {};
         for i in range(0, n):
@@ -47,13 +42,10 @@ class TextReduce(object):
         return sentences_dic;
  
     def get_best_sentence(self, paragraph, sentences_dic):
- 
         sentences = self.toSent(paragraph);
- 
         # Ignore short paragraphs
         if len(sentences) < 2:
             return "";
- 
         # Get the best sentence according to the sentences dictionary
         best_sentence = "";
         max_value = 0;
@@ -63,22 +55,17 @@ class TextReduce(object):
                 if sentences_dic[strip_s] > max_value:
                     max_value = sentences_dic[strip_s];
                     best_sentence = s;
- 
         return best_sentence;
  
     def get_summary(self, content, sentences_dic):
- 
         paragraphs = self.toPara(content);
- 
         summary = [];
         summary.append("");
- 
         # Add the best sentence from each paragraph
         for p in paragraphs:
             sentence = self.get_best_sentence(p, sentences_dic).strip();
             if sentence:
                 summary.append(sentence);
- 
         return ("\n").join(summary);
  
 def main():
@@ -136,17 +123,17 @@ Rioting began in Soweto on 16 June 1976. The riots spread and they continued int
 21st Century South Africa
 
 In the early 21st century the economy of South Africa grew but recently it has slowed. South Africa suffers from high unemployment. The country also suffers from widespread poverty. However tourism in South Africa is an important industry. South Africa is also rich in minerals. Today the population of South Africa is 53 million.
-    """;
+    """
      
-    reducer = TextReduce();
-    sentences_dic = reducer.getSentRanks(content);
-    summary = reducer.get_summary(content, sentences_dic);
+    reducer = TextReduce()
+    sentences_dic = reducer.getSentRanks(content)
+    summary = reducer.get_summary(content, sentences_dic)
  
-    print summary;
-    print "";
-    print "Original Length 	:  %s" % len(content);
-    print "Summary Length	 	:  %s" % len(summary);
-    print "Summary Ratio		:  %s" % (100 * (len(summary) / len(content)));
+    print summary
+    print ""
+    print "Original Length 	:  %s" % len(content)
+    print "Summary Length	 	:  %s" % len(summary)
+    print "Summary Ratio		:  %s" % (100 * (len(summary) / len(content)))
  
 if __name__ == '__main__':
-    main();
+    main()
